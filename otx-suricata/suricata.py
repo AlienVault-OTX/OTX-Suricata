@@ -115,7 +115,7 @@ def getArgs():
     parser.add_argument("--skip-iprep", action='store_true', default=False,
                         help="Do not generate IP Reputation files and rules")
     parser.add_argument("--skip-filemd5", action='store_true', default=False, help="Do not generate file MD5 and rules")
-    parser.add_argument("--key", help="Your OTX API key (https://otx.alienvault.com/api)")
+    parser.add_argument("--key", required=True,help="Your OTX API key (https://otx.alienvault.com/api)")
     parser.add_argument("--destination-directory", "-dd", required=False, type=argparse.FileType('w'),
                         help="The destination directory for the generated file")
     return parser.parse_args()
