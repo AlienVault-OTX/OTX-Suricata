@@ -7,8 +7,12 @@ import sys
 import math
 from random import randint
 
+import unicodedata
 from OTXv2 import OTXv2
 import IndicatorTypes
+
+
+
 
 
 class SuricataClient(object):
@@ -54,7 +58,7 @@ class SuricataClient(object):
                         ip_count += len(ip_list)
                 if generate_iprep:
                     self.write_core_iprep_files()
-                    sys.stdout.write("Wrote related iprep rules to {}\n".format(file.name))
+                    sys.stdout.write("Wrote related iprep rules to {}\n".format(self.get_destination('otx_iprep.rules')))
                     sys.stdout.write("Wrote {0} IPv4 & IPv6 to {1}\n".format(str(ip_count), rep_file.name))
                     sys.stdout.write("========================================\n")
                     sys.stdout.write(
@@ -93,11 +97,12 @@ class SuricataClient(object):
                     sys.stdout.write("==========  End YAML Snippet  ==========\n")
 
     def add_file_rule(self, rule_file=None, md5_file=None, pulse=None, pulse_id=None):
-        rule_file.write(SuricataClient.file_rule_template.format(name=pulse['name'],
+        rule_file.write(SuricataClient.file_rule_template.format(name=self.clean(pulse['name']),
                                                                  pulse_md5_file=md5_file,
                                                                  pulse_id=pulse_id,
                                                                  random=randint(1000, 9999)))
-
+    def clean(self, param):
+        return unicodedata.normalize("NFKD",param).encode('ascii','ignore')
     def write_hash_file(self, md5_list, md5_file=None):
         with self.get_destination(md5_file) as hash_file:
             for md5 in md5_list:
