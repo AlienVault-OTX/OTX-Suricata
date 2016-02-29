@@ -16,7 +16,7 @@ class SuricataClient(object):
     ip_category_template = "41,Pulse,OTX community identified IP address\n"
     ip_rep_template = "{ip},41,127\n"
 
-    file_rule_template = "alert http any any -> $HOME_NET any (msg:\"OTX - FILE MD5 from pulse {name}\";  filemd5:{pulse_md5_file}; reference: url, otx.alienvault.com/pulse/{pulse_id}; sid:41{random}; rev:1;)"
+    file_rule_template = "alert http any any -> $HOME_NET any (msg:\"OTX - FILE MD5 from pulse {name}\";  filemd5:{pulse_md5_file}; reference: url, otx.alienvault.com/pulse/{pulse_id}; sid:41{random}; rev:1;)\n"
 
     def __init__(self, api_key, base_dir):
         self.client = OTXv2(api_key=api_key, project="Suricata")
@@ -39,7 +39,7 @@ class SuricataClient(object):
                     ip_list = []
                     for indicator in pulse["indicators"]:
                         type_ = indicator["type"]
-                        if type_ is IndicatorTypes.FILE_HASH_MD5.name:
+                        if type_ == IndicatorTypes.FILE_HASH_MD5.name:
                             md5_list.append(indicator["indicator"])
                         if type_ in [IndicatorTypes.IPv4.name, IndicatorTypes.IPv6.name]:
                             ip_list.append(indicator["indicator"])
@@ -47,7 +47,7 @@ class SuricataClient(object):
                     if len(md5_list) > 0 and generate_md5_rules:
                         md5_file = '{0}.txt'.format(pulse_id)
                         self.add_file_rule(file_rule_file, md5_file, pulse, pulse_id)
-                        self.write_hash_file(md5_list)
+                        self.write_hash_file(md5_list,md5_file)
                         md5_file_count += 1
                     if len(ip_list) > 0 and generate_iprep:
                         self.add_iprep(rep_file, ip_list)
@@ -100,10 +100,12 @@ class SuricataClient(object):
 
     def write_hash_file(self, md5_list, md5_file=None):
         with self.get_destination(md5_file) as hash_file:
-            hash_file.writelines(md5_list)
+            for md5 in md5_list:
+                hash_file.write("{0}\n".format(md5))
 
     def add_iprep(self, rep_file, ip_list):
-        rep_file.writelines(ip_list)
+        for ip in ip_list:
+            rep_file.write("{0}\n".format(ip))
 
     def write_core_iprep_files(self):
         with self.get_destination('categories.txt') as file:
