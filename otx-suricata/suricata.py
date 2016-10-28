@@ -12,9 +12,6 @@ from OTXv2 import OTXv2
 import IndicatorTypes
 
 
-
-
-
 class SuricataClient(object):
     ip_rule_template = "alert ip $HOME_NET any -> any any (msg:\"OTX internal host talking to host known in pulse\"; flow:to_server; iprep:dst,Pulse,>,30; sid:41414141; rev:1;)\n"
     ip_category_template = "41,Pulse,OTX community identified IP address\n"
@@ -51,20 +48,21 @@ class SuricataClient(object):
                     if len(md5_list) > 0 and generate_md5_rules:
                         md5_file = '{0}.txt'.format(pulse_id)
                         self.add_file_rule(file_rule_file, md5_file, pulse, pulse_id)
-                        self.write_hash_file(md5_list,md5_file)
+                        self.write_hash_file(md5_list, md5_file)
                         md5_file_count += 1
                     if len(ip_list) > 0 and generate_iprep:
                         self.add_iprep(rep_file, ip_list)
                         ip_count += len(ip_list)
                 if generate_iprep:
                     self.write_core_iprep_files()
-                    sys.stdout.write("Wrote related iprep rules to {}\n".format(self.get_destination('otx_iprep.rules')))
+                    sys.stdout.write(
+                        "Wrote related iprep rules to {}\n".format(self.get_destination('otx_iprep.rules')))
                     sys.stdout.write("Wrote {0} IPv4 & IPv6 to {1}\n".format(str(ip_count), rep_file.name))
                     sys.stdout.write("========================================\n")
                     sys.stdout.write(
-                            "To leverage generated files, enable the suricata iprep feature in suricata.yaml\n")
+                        "To leverage generated files, enable the suricata iprep feature in suricata.yaml\n")
                     sys.stdout.write(
-                            "A default configuration for iprep with these rules can be enabled by appending the following to suricata.yaml\n")
+                        "A default configuration for iprep with these rules can be enabled by appending the following to suricata.yaml\n")
                     sys.stdout.write("========================================\n")
                     sys.stdout.write("NOTE: Please read the docs to adapt for your environment\n")
                     sys.stdout.write("========== Start YAML Snippet ==========\n")
@@ -81,7 +79,7 @@ class SuricataClient(object):
                     sys.stdout.write("========================================\n")
                     sys.stdout.write("To leverage generated files, enable the suricata file feature in suricata.yaml\n")
                     sys.stdout.write(
-                            "A default configuration for the file feature with these rules can be enabled by append the following to suricata.yaml\n")
+                        "A default configuration for the file feature with these rules can be enabled by append the following to suricata.yaml\n")
                     sys.stdout.write(
                         "The following was a snippet from 'http://jasonish-suricata.readthedocs.org/en/latest/file-extraction/file-extraction.html'\n")
                     sys.stdout.write("========================================\n")
@@ -101,8 +99,10 @@ class SuricataClient(object):
                                                                  pulse_md5_file=md5_file,
                                                                  pulse_id=pulse_id,
                                                                  random=randint(1000, 9999)))
+
     def clean(self, param):
-        return unicodedata.normalize("NFKD",param).encode('ascii','ignore')
+        return unicodedata.normalize("NFKD", param).encode('ascii', 'ignore')
+
     def write_hash_file(self, md5_list, md5_file=None):
         with self.get_destination(md5_file) as hash_file:
             for md5 in md5_list:
@@ -110,7 +110,7 @@ class SuricataClient(object):
 
     def add_iprep(self, rep_file, ip_list):
         for ip in ip_list:
-            rep_file.write("{0}\n".format(ip))
+            rep_file.write(ip_rep_template.format(ip))
 
     def write_core_iprep_files(self):
         with self.get_destination('categories.txt') as file:
@@ -124,7 +124,7 @@ def getArgs():
     parser.add_argument("--skip-iprep", action='store_true', default=False,
                         help="Do not generate IP Reputation files and rules")
     parser.add_argument("--skip-filemd5", action='store_true', default=False, help="Do not generate file MD5 and rules")
-    parser.add_argument("--key", required=True,help="Your OTX API key (https://otx.alienvault.com/api)")
+    parser.add_argument("--key", required=True, help="Your OTX API key (https://otx.alienvault.com/api)")
     parser.add_argument("--destination-directory", "-dd", required=False, type=argparse.FileType('w'),
                         help="The destination directory for the generated file")
     return parser.parse_args()
