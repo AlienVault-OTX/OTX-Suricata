@@ -110,7 +110,7 @@ class SuricataClient(object):
 
     def add_iprep(self, rep_file, ip_list):
         for ip in ip_list:
-            rep_file.write(ip_rep_template.format(ip))
+            rep_file.write(SuricataClient.ip_rep_template.format(ip=ip))
 
     def write_core_iprep_files(self):
         with self.get_destination('categories.txt') as file:
