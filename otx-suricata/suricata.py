@@ -56,7 +56,7 @@ class SuricataClient(object):
                 if generate_iprep:
                     self.write_core_iprep_files()
                     sys.stdout.write(
-                        "Wrote related iprep rules to {}\n".format(self.get_destination('otx_iprep.rules')))
+                        "Wrote related iprep rules to {}\n".format('otx_iprep.rules'))
                     sys.stdout.write("Wrote {0} IPv4 & IPv6 to {1}\n".format(str(ip_count), rep_file.name))
                     sys.stdout.write("========================================\n")
                     sys.stdout.write(
