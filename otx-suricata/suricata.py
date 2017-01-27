@@ -125,7 +125,7 @@ def getArgs():
                         help="Do not generate IP Reputation files and rules")
     parser.add_argument("--skip-filemd5", action='store_true', default=False, help="Do not generate file MD5 and rules")
     parser.add_argument("--key", required=True, help="Your OTX API key (https://otx.alienvault.com/api)")
-    parser.add_argument("--destination-directory", "-dd", required=False, type=argparse.FileType('w'),
+    parser.add_argument("--destination-directory", "-dd", required=False,
                         help="The destination directory for the generated file")
     return parser.parse_args()
 
@@ -137,5 +137,5 @@ if __name__ == '__main__':
         base_dir = args.destination_directory
     else:
         base_dir = os.getcwd()
-    sclient = SuricataClient(args.key, base_dir)
+    sclient = SuricataClient(args.key, base_dir=base_dir)
     sclient.generate_rules(not args.skip_iprep, not args.skip_filemd5)
