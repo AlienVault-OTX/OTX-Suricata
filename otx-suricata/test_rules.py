@@ -47,7 +47,7 @@ class TestGenerateRules(TestOTXv2):
         self.assertTrue(file_rules)
         # Check each rule matches a very lax regex
         for rule in file_rules:
-            print "- Validating file rule [" + rule.strip() + "]"
+            print ("- Validating file rule [" + rule.strip() + "]")
             self.assertTrue(re.match(FILE_RULE_REGEX, rule.strip()))
 
 
@@ -58,7 +58,7 @@ class TestGenerateRules(TestOTXv2):
         self.assertTrue(ip_rules)
         # Check each rule matches a very lax regex
         for rule in ip_rules:
-            print "- Validating IP rule [" + rule.strip() + "]"
+            print ("- Validating IP rule [" + rule.strip() + "]")
             self.assertTrue(re.match(IPV4_RULE_REGEX, rule.strip()) or re.match(IPV6_RULE_REGEX, rule.strip()))
 
 
