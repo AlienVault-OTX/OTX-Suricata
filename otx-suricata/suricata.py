@@ -27,7 +27,7 @@ class SuricataClient(object):
         return open(self.get_path(param), mode='w')
 
     def get_path(self, param):
-        return os.path.join(base_dir, param)
+        return os.path.join(self.base_dir, param)
 
     def generate_rules(self, generate_md5_rules=False, generate_iprep=False):
         with self.get_destination('otx_file_rules.rules') as file_rule_file:
