@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/AlienVault-Labs/OTX-Suricata.svg?branch=master)](https://travis-ci.org/AlienVault-Labs/OTX-Suricata)
 
 # OTX Suricata Rule Generator
 The OTX Suricata Rule Generator can be used to create the rules and configuration for Suricata to alert on indicators from your OTX account (otx.alienvault.com).  This is done with the suricata IP Reputation and file extraction features.  For every pulse your are subscribed to this will add the all the IPv4 indicators in every pulse to a generated IP reputation file.  It will also create a suricata MD5 file for each pulse that has MD5 indicators, there will be a corresponding rule generated that corresponds with each of these files.
