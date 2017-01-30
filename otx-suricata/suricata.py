@@ -131,7 +131,7 @@ def getArgs():
 
 
 if __name__ == '__main__':
-    print sys.argv
+    print (sys.argv)
     args = getArgs()
     if args.destination_directory:
         base_dir = args.destination_directory
