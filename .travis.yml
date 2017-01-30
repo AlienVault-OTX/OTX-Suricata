@@ -7,4 +7,4 @@ before_script:
  - chmod +x ./otx-suricata/test_rules.py
 
 # command to run tests
-script: ./otx-suricata/python test_client.py
+script: python ./otx-suricata/test_client.py
